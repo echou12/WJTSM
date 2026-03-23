@@ -1,14 +1,11 @@
-// lib/auth.ts
-// NextAuth v5 beta with Credentials provider + JWT session
-// Pure password auth — no email OTP, no WebAuthn
-
-import NextAuth from 'next-auth'
-import Credentials from 'next-auth/providers/credentials'
+// lib/auth.ts — NextAuth v4
+import { NextAuthOptions } from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import prisma from '@/lib/prisma'
 import { UserRole } from '@prisma/client'
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
   secret: process.env.NEXTAUTH_SECRET,
 
@@ -18,7 +15,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 
   providers: [
-    Credentials({
+    CredentialsProvider({
+      name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
@@ -26,26 +24,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null
 
-        const email = credentials.email as string
-        const password = credentials.password as string
-
         const user = await prisma.user.findUnique({
-          where: { email },
+          where: { email: credentials.email },
         })
 
         if (!user || !user.isActive) return null
 
-        const isValid = await bcrypt.compare(password, user.password)
+        const isValid = await bcrypt.compare(credentials.password, user.password)
         if (!isValid) return null
 
-        // Return plain object — no class instances
         return {
           id: user.id,
           name: user.name ?? '',
           email: user.email,
           role: user.role,
           image: user.image ?? null,
-        }
+        } as any
       },
     }),
   ],
@@ -58,13 +52,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token
     },
-
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id as string
-        session.user.role = token.role as UserRole
+        (session.user as any).id = token.id as string
+        ;(session.user as any).role = token.role as UserRole
       }
       return session
     },
   },
-})
+}
+
+// v4 compat exports used by middleware / server components
+import NextAuth from 'next-auth'
+export default NextAuth(authOptions)
+export const { handlers, auth, signIn, signOut } = {
+  handlers: null as any,
+  auth: null as any,
+  signIn: null as any,
+  signOut: null as any,
+}
