@@ -24,12 +24,7 @@ declare module 'next-auth' {
   }
 }
 
-declare module '@auth/core/jwt' {
-  interface JWT {
-    id: string
-    role: UserRole
-  }
-}
+// JWT augmentation handled via next-auth session callbacks
 
 // ─── USERS ────────────────────────────────────────────────────────────────────
 
