@@ -1,9 +1,9 @@
 // lib/auth.ts
-// Auth.js v5 (NextAuth) with Credentials provider + JWT session
-// Using JWT strategy - no adapter needed for credentials auth
+// NextAuth v5 beta with Credentials provider + JWT session
+// Pure password auth — no email OTP, no WebAuthn
 
 import NextAuth from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
+import Credentials from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import prisma from '@/lib/prisma'
 import { UserRole } from '@prisma/client'
@@ -18,8 +18,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 
   providers: [
-    CredentialsProvider({
-      name: 'credentials',
+    Credentials({
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
@@ -27,25 +26,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null
 
+        const email = credentials.email as string
+        const password = credentials.password as string
+
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string },
+          where: { email },
         })
 
         if (!user || !user.isActive) return null
 
-        const isValid = await bcrypt.compare(
-          credentials.password as string,
-          user.password
-        )
-
+        const isValid = await bcrypt.compare(password, user.password)
         if (!isValid) return null
 
+        // Return plain object — no class instances
         return {
           id: user.id,
-          name: user.name,
+          name: user.name ?? '',
           email: user.email,
           role: user.role,
-          image: user.image,
+          image: user.image ?? null,
         }
       },
     }),
