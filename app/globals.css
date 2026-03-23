@@ -1,0 +1,357 @@
+/* app/globals.css — TSM Design: dark sidebar + white content (matches screenshot) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── Sidebar (dark navy) ─────────────────────────────── */
+    --sidebar-bg:        #1a2332;
+    --sidebar-hover:     #243044;
+    --sidebar-active:    #2d3d55;
+    --sidebar-border:    #243044;
+    --sidebar-text:      #94a3b8;
+    --sidebar-text-active: #ffffff;
+
+    /* ── Main content (light) ────────────────────────────── */
+    --content-bg:        #f5f6f8;
+    --card-bg:           #ffffff;
+    --card-border:       #e5e7eb;
+    --header-bg:         #ffffff;
+    --header-border:     #e5e7eb;
+
+    /* ── Typography ──────────────────────────────────────── */
+    --text-primary:      #111827;
+    --text-secondary:    #6b7280;
+    --text-muted:        #9ca3af;
+    --text-label:        #374151;
+
+    /* ── Brand accent (blue like screenshot) ─────────────── */
+    --accent:            #4f6ef7;
+    --accent-light:      #eff2ff;
+    --accent-hover:      #3b5bdb;
+
+    /* ── Status colors ───────────────────────────────────── */
+    --green:             #16a34a;
+    --green-light:       #f0fdf4;
+    --red:               #dc2626;
+    --red-light:         #fef2f2;
+    --blue:              #4f6ef7;
+    --blue-light:        #eff2ff;
+    --orange:            #ea580c;
+    --orange-light:      #fff7ed;
+
+    /* ── Shadcn compat ───────────────────────────────────── */
+    --background: 0 0% 96%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 231 80% 64%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 214 32% 91%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 214 32% 91%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 231 80% 64%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  * { border-color: var(--card-border); }
+
+  html, body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background: var(--content-bg);
+    color: var(--text-primary);
+  }
+
+  /* Scrollbar — light theme */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--content-bg); }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+}
+
+@layer utilities {
+  /* ── Sidebar ───────────────────────────────────────────── */
+  .tsm-sidebar {
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
+  }
+
+  .tsm-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--sidebar-text);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin: 1px 8px;
+  }
+  .tsm-nav-item:hover {
+    background: var(--sidebar-hover);
+    color: #fff;
+  }
+  .tsm-nav-item.active {
+    background: var(--sidebar-active);
+    color: #fff;
+  }
+
+  /* ── Header ────────────────────────────────────────────── */
+  .tsm-header {
+    background: var(--sidebar-bg);
+    border-bottom: 1px solid var(--sidebar-border);
+  }
+
+  /* ── Content area ──────────────────────────────────────── */
+  .tsm-content {
+    background: var(--content-bg);
+  }
+
+  /* ── Cards ─────────────────────────────────────────────── */
+  .tsm-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+  }
+  .tsm-card:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  /* ── Stat values (colored) ─────────────────────────────── */
+  .val-blue   { color: var(--blue);  }
+  .val-green  { color: var(--green); }
+  .val-red    { color: var(--red);   }
+  .val-orange { color: var(--orange);}
+
+  /* ── Badges ─────────────────────────────────────────────── */
+  .tsm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+  }
+  .badge-blue   { background:var(--blue-light);   color:var(--blue);  border-color:#c7d2fe; }
+  .badge-green  { background:var(--green-light);  color:var(--green); border-color:#bbf7d0; }
+  .badge-red    { background:var(--red-light);    color:var(--red);   border-color:#fecaca; }
+  .badge-gray   { background:#f3f4f6; color:#6b7280; border-color:#e5e7eb; }
+  .badge-yellow { background:#fffbeb; color:#d97706; border-color:#fde68a; }
+  .badge-purple { background:#f5f3ff; color:#7c3aed; border-color:#ddd6fe; }
+  .badge-slate  { background:#f8fafc; color:#64748b; border-color:#e2e8f0; }
+
+  /* ── Buttons ────────────────────────────────────────────── */
+  .tsm-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tsm-btn-primary:hover { background: var(--accent-hover); }
+
+  .tsm-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #fff;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: 6px;
+    border: 1px solid var(--card-border);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tsm-btn-ghost:hover { border-color: #9ca3af; color: var(--text-primary); }
+
+  .tsm-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: 6px;
+    border: 1px solid var(--card-border);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tsm-btn-outline:hover { background: #f9fafb; color: var(--text-primary); }
+
+  /* ── Inputs ─────────────────────────────────────────────── */
+  .tsm-input {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .tsm-input::placeholder { color: var(--text-muted); }
+  .tsm-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,110,247,0.1);
+  }
+
+  /* ── Table ──────────────────────────────────────────────── */
+  .tsm-table { width: 100%; font-size: 0.8125rem; border-collapse: collapse; }
+  .tsm-table thead tr {
+    background: #f9fafb;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .tsm-table th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .tsm-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+  .tsm-table tbody tr:hover td { background: #fafafa; }
+  .tsm-table tfoot tr td {
+    background: #f9fafb;
+    border-top: 1px solid var(--card-border);
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  /* ── Tabs ───────────────────────────────────────────────── */
+  .tsm-tab {
+    flex: 1;
+    padding: 9px 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    text-align: center;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .tsm-tab:hover { color: var(--text-primary); }
+  .tsm-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── Section label ──────────────────────────────────────── */
+  .tsm-section-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ── Modal ──────────────────────────────────────────────── */
+  .tsm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .tsm-modal {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    z-index: 50;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Empty state ────────────────────────────────────────── */
+  .tsm-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    gap: 10px;
+  }
+
+  /* ── Icon box ───────────────────────────────────────────── */
+  .icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── Divider ────────────────────────────────────────────── */
+  .tsm-divider { border-top: 1px solid var(--card-border); }
+
+  /* ── Page title ─────────────────────────────────────────── */
+  .page-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .page-subtitle {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+}
