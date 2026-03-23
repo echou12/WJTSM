@@ -1,16 +1,14 @@
 // lib/auth.ts
-// Auth.js v5 (NextAuth) with Credentials provider + Prisma adapter
-// FUTURE EXTENSION: Add OAuth providers (Google, GitHub) here
+// Auth.js v5 (NextAuth) with Credentials provider + JWT session
+// Using JWT strategy - no adapter needed for credentials auth
 
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { PrismaAdapter } from '@auth/prisma-adapter'
 import bcrypt from 'bcryptjs'
 import prisma from '@/lib/prisma'
 import { UserRole } from '@prisma/client'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   secret: process.env.NEXTAUTH_SECRET,
 
